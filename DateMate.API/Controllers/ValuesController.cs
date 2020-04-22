@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DateMate.API.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DateMate.API.Controllers
 {
+ [Authorize]
  [Route("api/[controller]")]
  [ApiController]   
 public class ValuesController : ControllerBase
@@ -24,6 +26,7 @@ public class ValuesController : ControllerBase
         return Ok(values);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetValue(int id)
     {

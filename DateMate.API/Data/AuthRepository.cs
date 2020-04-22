@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using DateMate.API.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace DateMate.API.Data
 {
@@ -29,7 +30,7 @@ namespace DateMate.API.Data
         }
         public void CreatePasswordHash(string password,out byte[] passwordHash,out byte[] passwordSalt)
         {
-            using(var hmac = System.Security.Cryptography.HMACSHA512())
+            using(var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
@@ -37,7 +38,7 @@ namespace DateMate.API.Data
         }
         public bool VerifyPasswordHash(string password,byte[] passwordHash,byte[] passwordSalt)
         {
-            using(var hmac = System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using(var hmac = new HMACSHA512(passwordSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
 
