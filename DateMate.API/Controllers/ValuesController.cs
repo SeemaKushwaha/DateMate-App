@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace DateMate.API.Controllers
 {
- [Authorize]
+ [AllowAnonymous]
  [Route("api/[controller]")]
  [ApiController]   
 public class ValuesController : ControllerBase
