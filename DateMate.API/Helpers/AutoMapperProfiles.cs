@@ -20,6 +20,8 @@ namespace DateMate.API.Helpers
             .ForMember( dest => dest.Age, opt => opt.MapFrom( src =>
             src.DateOfBirth.CalculateAge()));
             CreateMap<Photo, PhotosForDetailsDto>();
+
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }
