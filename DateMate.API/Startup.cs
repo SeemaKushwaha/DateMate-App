@@ -29,11 +29,9 @@ namespace DateMate.API
         public Startup(IConfiguration configuration) 
         {
             this.Configuration = configuration;
-               
         }
         
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -43,6 +41,7 @@ namespace DateMate.API
                 Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
             services.AddCors();
+            services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
             services.AddAutoMapper(typeof(DateMateRepository).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDateMateRepository, DateMateRepository>();
@@ -56,7 +55,6 @@ namespace DateMate.API
                     ValidateAudience =false
                 };
             });
-
 
         }
 

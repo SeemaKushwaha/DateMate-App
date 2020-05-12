@@ -1,0 +1,20 @@
+using Microsoft.AspNetCore.Http;
+using System;
+
+namespace DateMate.API.Dtos
+{
+    public class PhotoForCreationDto
+    {
+        public string Url { get; set; }
+        public IFormFile File { get; set; }
+        public string description { get; set; }
+        public DateTime DateAdded { get; set; }
+        public string PublicId { get; set; }
+
+        public PhotoForCreationDto()
+        {
+            DateAdded = DateTime.Now;
+        }
+
+    }
+}
