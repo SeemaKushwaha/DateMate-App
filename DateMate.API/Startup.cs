@@ -45,6 +45,7 @@ namespace DateMate.API
             services.AddAutoMapper(typeof(DateMateRepository).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IDateMateRepository, DateMateRepository>();
+            services.AddScoped<LogUserActivity>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
 
                 options.TokenValidationParameters = new  TokenValidationParameters

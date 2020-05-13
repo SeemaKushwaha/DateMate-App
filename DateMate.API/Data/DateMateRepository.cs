@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using DateMate.API.Models;
+using DateMate.API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace DateMate.API.Data
@@ -37,9 +39,32 @@ namespace DateMate.API.Data
             return await _context.Photos.Where(n =>n.UserId==userId).FirstOrDefaultAsync(p => p.IsMain);
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<PagedList<User>> GetUsers(UserParams userParams)
         {
-            return await _context.Users.Include(p =>p.Photos).ToListAsync();
+            var users= _context.Users.Include(p =>p.Photos).OrderByDescending(o => o.LastActive).AsQueryable();
+            users = users.Where( u => u.Id != userParams.UserId);
+            users = users.Where( u => u.Gender == userParams.Gender);
+            if(userParams.MinAge != 18 || userParams.MaxAge != 99)
+            {
+                var minDob = DateTime.Today.AddYears(-userParams.MaxAge - 1);
+                var maxDob = DateTime.Today.AddYears(-userParams.MinAge);
+
+                users = users.Where(a => a.DateOfBirth >= minDob && a.DateOfBirth <= maxDob);
+            }
+            if(!string.IsNullOrEmpty(userParams.OrderBy))
+            {
+                switch(userParams.OrderBy)
+                {
+                    case "created":
+                        users = users.OrderByDescending(o => o.Created);
+                        break;
+                    default:
+                        users = users.OrderByDescending(o => o.LastActive);
+                        break;
+
+                }
+            }
+            return await PagedList<User>.CreateAsync(users, userParams.PageNumber, userParams.PageSize);
         }
         public async Task<bool> SaveAll()
         {
